@@ -15,9 +15,9 @@
 </head>
 
 <body>
-    <h1>Cadastro</h1>
+    <h1><a href="/cadastropessoa">Cadastro</a></h1>
     <hr>
-    <form action="/salvarpessoa" method="post" th:object="${pessoaobj}">
+    <form action="/cadastropessoa/salvar" method="post" th:object="${pessoaobj}">
         <input type="text" name="id" th:field="*{id}" hidden><br>
         Nome: <input type="text" name="nome" th:field="*{nome}"><br>
         Sobrenome: <input type="text" name="sobrenome" th:field="*{sobrenome}"><br>

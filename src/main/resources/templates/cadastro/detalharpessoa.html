@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de pessoa</title>
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <style>
+        input[type=submit] {
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <h1><a href="/cadastropessoa">Cadastro Spring MVC</a></h1>
+    <hr>
+    <div class="row">
+        <p>id: <span th:text="${pessoaobj.id}"></span></p>
+        <p>nome: <span th:text="${pessoaobj.nome}"></span></p>
+        <p>sobrenome: <span th:text="${pessoaobj.sobrenome}"></span></p>
+        <p>idade: <span th:text="${pessoaobj.idade}"></span></p>
+    </div>
+
+    <h5>Telefones</h5>
+    <div class="row">
+        <form class="col s12" action="/cadastropessoa/telefone/salvar" method="post">
+            <input type="hidden" name="pessoa_id" th:value="${pessoaobj.id}">
+            <div class="row">
+                <div class="input-field col s6">
+                    <label for="telefone">Telefone</label>
+                    <input type="text" name="telefone" id="telefone"><br>
+                </div>
+                <div class="input-field col s6">
+                    <label for="tipotelefone">Tipo do telefone</label>
+                    <input type="text" name="tipotelefone" id="tipotelefone"><br>
+                </div>
+                <input class="waves-effect waves-light btn teal darken-4" type="submit" value="Salvar">
+            </div>
+        </form>
+        <br>
+    </div>
+
+    <table class="striped">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Número</th>
+                <th>Categoria</th>
+                <th>Excluir</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="telefone : ${telefones}">
+                <td th:text="${telefone.id}"></td>
+                <td th:text="${telefone.numero}"></td>
+                <td th:text="${telefone.categoria}"></td>
+                <td><a th:href="@{/cadastropessoa/telefone/excluir/{idtelefone}(idtelefone=${telefone.id})}">Excluir</a></td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+
+</html>

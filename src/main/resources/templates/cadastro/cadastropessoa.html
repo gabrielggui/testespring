@@ -12,17 +12,17 @@
     <!-- Compiled and minified JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <style>
-        input[type=submit]{
+        input[type=submit] {
             color: white;
         }
     </style>
 </head>
 
 <body>
-    <h1>Cadastro Spring MVC</h1>
+    <h1><a href="/">Cadastro Spring MVC</a></h1>
     <hr>
     <div class="row">
-        <form class="col s12" action="/salvarpessoa" method="post" id="formpessoa">
+        <form class="col s12" action="/cadastropessoa/salvar" method="post" id="formpessoa">
             <div class="row">
                 <div class="input-field col s6">
                     <label for="nome">Nome</label>
@@ -49,7 +49,7 @@
     <div class="row">
 
 
-        <form class="col s12" action="/buscarpessoa" method="post">
+        <form class="col s12" action="/cadastropessoa/buscar" method="post">
             <h6>Pesquisa por nome</h6>
             <div class="row">
                 <div class="input-field col s12">
@@ -78,11 +78,15 @@
         <tbody>
             <tr th:each="pessoa : ${pessoas}">
                 <td th:text="${pessoa.id}"></td>
-                <td th:text="${pessoa.nome}"></td>
+                <td>
+                    <a th:href="@{/cadastropessoa/detalhar/{idpessoa}(idpessoa=${pessoa.id})}">
+                        <span th:text="${pessoa.nome}"></span>
+                    </a>
+                </td>
                 <td th:text="${pessoa.sobrenome}"></td>
                 <td th:text="${pessoa.idade}"></td>
-                <td><a th:href="@{/editarpessoa/{idpessoa}(idpessoa=${pessoa.id})}">Editar</a></td>
-                <td><a th:href="@{/excluirpessoa/{idpessoa}(idpessoa=${pessoa.id})}">Editar</a></td>
+                <td><a th:href="@{/cadastropessoa/editar/{idpessoa}(idpessoa=${pessoa.id})}">Editar</a></td>
+                <td><a th:href="@{/cadastropessoa/excluir/{idpessoa}(idpessoa=${pessoa.id})}">Excluir</a></td>
             </tr>
         </tbody>
     </table>
