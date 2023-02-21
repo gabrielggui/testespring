@@ -1,9 +1,12 @@
 package com.gabriel.spring.controller;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,6 +19,8 @@ import com.gabriel.spring.model.Pessoa;
 import com.gabriel.spring.model.Telefone;
 import com.gabriel.spring.repository.PessoaRepository;
 import com.gabriel.spring.repository.TelefoneRepository;
+
+import jakarta.validation.Valid;
 
 @Controller
 @RequestMapping("/cadastropessoa")
@@ -33,7 +38,18 @@ public class PessoaController {
     }
 
     @PostMapping("/salvar")
-    public ModelAndView salvar(Pessoa pessoa) {
+    public ModelAndView salvar(@Valid Pessoa pessoa, BindingResult bindingResult) {
+
+        if (bindingResult.hasErrors()) {
+            List<String> erros = new ArrayList<>();
+            for (ObjectError objectError : bindingResult.getAllErrors())
+                erros.add(objectError.getDefaultMessage());
+
+            return new ModelAndView("cadastro/cadastropessoa")
+                    .addObject("pessoas", pessoaRepository.findAll())
+                    .addObject("erros", erros);
+        }
+
         pessoaRepository.save(pessoa);
         return inicio();
     }
@@ -60,20 +76,32 @@ public class PessoaController {
     public ModelAndView detalhar(@PathVariable("idpessoa") Long id) {
         return new ModelAndView("cadastro/detalharpessoa")
                 .addObject("pessoaobj", pessoaRepository.findById(id).get())
+                .addObject("campospreenchidos", new Telefone("","",null))
                 .addObject("telefones", telefoneRepository.findAllByPessoaId(id));
     }
 
     @PostMapping("/telefone/salvar")
-    public ModelAndView salvarTelefone(@RequestParam("pessoa_id") Long pessoaIdParam,
-            @RequestParam("telefone") String telefoneParam,
-            @RequestParam("tipotelefone") String tipoTelefoneParam) {
+    public ModelAndView salvarTelefone(@Valid Telefone telefone, BindingResult bindingResult) {
+        Pessoa pessoa = pessoaRepository.findById(telefone.getPessoaId()).get();
 
-        Pessoa pessoa = pessoaRepository.findById(pessoaIdParam).get();
-        telefoneRepository.save(new Telefone(telefoneParam, tipoTelefoneParam, pessoa));
+        if (bindingResult.hasErrors()) {
+            List<String> erros = new ArrayList<>();
+            for (ObjectError objectError : bindingResult.getAllErrors())
+                erros.add(objectError.getDefaultMessage());
+            return new ModelAndView("cadastro/detalharpessoa")
+                    .addObject("pessoaobj", pessoa)
+                    .addObject("erros", erros)
+                    .addObject("campospreenchidos", telefone)
+                    .addObject("telefones", telefoneRepository.findAllByPessoaId(telefone.getPessoaId()));
+        }
+
+        telefone.setPessoa(pessoa);
+        telefoneRepository.save(telefone);
 
         return new ModelAndView("cadastro/detalharpessoa")
                 .addObject("pessoaobj", pessoa)
-                .addObject("telefones", telefoneRepository.findAllByPessoaId(pessoaIdParam));
+                .addObject("campospreenchidos", new Telefone("","",null))
+                .addObject("telefones", telefoneRepository.findAllByPessoaId(telefone.getPessoaId()));
     }
 
     @GetMapping("/telefone/excluir/{idtelefone}")

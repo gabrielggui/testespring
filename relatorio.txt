@@ -1,0 +1,9 @@
+=== O QUE FOI FEITO ATÉ AGORA ===
+
+* CRUD Telefone
+* Busca por pessoa
+* Telas em materialize
+* Entidade "Telefone" n -> m
+* Criado tela de "detalhes" contendo a pessoa e a lista de telefones e cadastro de novos telefones
+* Remoção de telefones
+* Validações de entradas de dados de "Pessoa" e "Telefone" do lado do cliente e do servidor

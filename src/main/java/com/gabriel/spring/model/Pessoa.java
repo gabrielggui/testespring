@@ -10,6 +10,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 public class Pessoa implements Serializable {
@@ -17,9 +20,19 @@ public class Pessoa implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    
+    @NotNull(message = "Nome não pode ser nulo")
+    @NotEmpty(message = "Nome não pode ser vazio")
     private String nome;
+    
+    @NotNull(message = "Sobrenome não pode ser nulo")
+    @NotEmpty(message = "Sobrenome não pode ser vazio")
     private String sobrenome;
+    
+    @Min(value = 18, message = "Idade inválida")
+    @NotNull(message = "Idade não pode ser vazio")
     private Integer idade;
+
     @OneToMany(mappedBy = "pessoa", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<Telefone> telefones = new ArrayList<>();
 
