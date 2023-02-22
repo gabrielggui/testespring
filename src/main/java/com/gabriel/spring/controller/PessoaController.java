@@ -20,7 +20,7 @@ import com.gabriel.spring.model.Telefone;
 import com.gabriel.spring.repository.PessoaRepository;
 import com.gabriel.spring.repository.TelefoneRepository;
 
-import jakarta.validation.Valid;
+import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/cadastropessoa")
