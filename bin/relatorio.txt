@@ -9,5 +9,3 @@
 * Validações de entradas de dados de "Pessoa" e "Telefone" do lado do cliente e do servidor
 * Spring Security: In-Memory Authentication
 * Spring Security: Autenticação com usuário no banco de dados
-* Spring Security: Controle de acessos com roles
-* Spring Security + Thymeleaf: Controlar a exibição de componentes HTML de acordo com os roles

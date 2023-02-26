@@ -1,5 +1,6 @@
 package com.gabriel.spring.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -8,9 +9,14 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import com.gabriel.spring.controller.UserDetailsServiceImpl;
+
 @SuppressWarnings("deprecation")
 @Configuration
 public class WebConfigSecurity extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    private UserDetailsServiceImpl userDetailsServiceImpl;
 
     /**
      * Este trecho de código Java é utilizado para configurar as regras de
@@ -22,7 +28,9 @@ public class WebConfigSecurity extends WebSecurityConfigurerAdapter {
                 .authorizeRequests() // permite configurar regras de autorização para diferentes URLs ou caminhos da
                                      // aplicação web.
                 .antMatchers(HttpMethod.GET, "/").permitAll() // correspondência de requisições, para requisições GET em
-                                                              // "/", permitir para todos
+                // "/", permitir para todos
+                .antMatchers(HttpMethod.GET, "/cadastropessoa").hasAnyRole("ADMIN","USUARIO") // correspondência de requisições, para requisições GET em
+                // "/", permitir para todos
                 .anyRequest().authenticated() // define que qualquer requisição (exceto a definida anteriormente) deve
                                               // ser autenticada
                 .and()
@@ -32,18 +40,22 @@ public class WebConfigSecurity extends WebSecurityConfigurerAdapter {
     }
 
     /**
-     * Configurar AUTENTICAÇÃO de usuário em uma aplicação web utilizando Spring Security
+     * Configurar AUTENTICAÇÃO de usuário em uma aplicação web utilizando Spring
+     * Security
      */
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication().passwordEncoder(new BCryptPasswordEncoder())
-                .withUser("gabriel")
-                .password("$2a$04$tnZEs9SdWIy4dt/EgI9PJuEtBcgQzBhKhnjpcZLXVCevB02IBw7/C")
-                .roles("ADMIN");
+        auth.userDetailsService(userDetailsServiceImpl)
+                .passwordEncoder(new BCryptPasswordEncoder());
+
+        // auth.inMemoryAuthentication().passwordEncoder(new BCryptPasswordEncoder())
+        // .withUser("gabriel")
+        // .password("$2a$04$tnZEs9SdWIy4dt/EgI9PJuEtBcgQzBhKhnjpcZLXVCevB02IBw7/C")
+        // .roles("ADMIN");
     }
 
     /**
-     * configurar a segurança/acesso de recursos estáticos 
+     * configurar a segurança/acesso de recursos estáticos
      */
     @Override
     public void configure(WebSecurity web) throws Exception {

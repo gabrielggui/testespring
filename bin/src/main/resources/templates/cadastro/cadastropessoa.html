@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
-xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
@@ -22,11 +21,11 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <body>
     <h1><a href="/">Cadastro Spring MVC</a></h1>
     <hr>
-
+    
     <br>
-    <div th:each=" erro : ${erros}">
-        <span th:text="${erro}"></span>
-    </div>
+        <div th:each=" erro : ${erros}">
+            <span th:text="${erro}"></span>
+        </div>
     <br>
 
     <div class="row">
@@ -40,7 +39,7 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
                     <label for="sobrenome">Sobrenome</label>
                     <input type="text" name="sobrenome" id="sobrenome" required><br>
                 </div>
-                <div class="input-field col s12" sec:authorize="hasRole('ROLE_ADMIN')">
+                <div class="input-field col s12">
                     <label for="idade">Idade</label>
                     <input type="number" name="idade" id="idade" required><br>
                 </div>
